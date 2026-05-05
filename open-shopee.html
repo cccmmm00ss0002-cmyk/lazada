@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>เปิดร้านของฉัน</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+    .fullscreen-link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+    }
+    .bg-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* ปรับให้รูปเต็มจอ (อาจจะโดนครอบบางส่วน) หรือใช้ contain ถ้าต้องการให้เห็นครบทั้งรูป */
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- คลิกที่รูปเพื่อไป Shopee -->
+  <a href="javascript:void(0);" class="fullscreen-link" id="redirectLink">
+    <img src="https://pub-7830b832a28e48c8938699ae81a469ac.r2.dev/S__25796612.jpg" class="bg-image" alt="ร้านของฉัน">
+  </a>
+
+<script>
+  const shopeeUrl = "https://s.shopee.co.th/7KoJhT5zjg";
+  const redirectLink = document.getElementById("redirectLink");
+  const ua = navigator.userAgent;
+
+  function openShopee() {
+    let opened = false;
+    
+    // ตรวจสอบการพยายามเปิดแอป
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) opened = true;
+    });
+
+    // พยายามเปิด Deep Link ของ Shopee
+    if (/Android/i.test(ua)) {
+      window.location = "intent://open#Intent;scheme=shopee;package=com.shopee.th;end";
+    } else if (/iPhone|iPad|iPod/i.test(ua)) {
+      window.location = "shopee://";
+    }
+
+    // ถ้าผ่านไป 1.5 วินาทีแล้วแอปไม่เปิด ให้ไปที่ URL เว็บปกติ
+    setTimeout(() => {
+      if (!opened) {
+        window.location.href = shopeeUrl;
+      }
+    }, 1500);
+  }
+
+  // เมื่อคลิกที่รูป
+  redirectLink.onclick = (e) => {
+    e.preventDefault();
+    openShopee();
+  };
+
+  // (ตัวเลือกเสริม) ถ้าต้องการให้เปิดอัตโนมัติทันทีที่เข้าหน้าเว็บนี้ ให้เอาคอมเมนต์บรรทัดข้างล่างออก
+  // window.onload = openShopee;
+</script>
+
+</body>
+</html>
